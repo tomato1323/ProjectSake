@@ -1,0 +1,81 @@
+<header class="header">
+    <span class="title">
+        Bar S
+    </span>
+    <ul class="navUl">
+        <li class="navLi_btn">
+            <a href={import.meta.env.BASE_URL}>TOP</a>
+        </li>
+        <form class="navLi" data-base={import.meta.env.BASE_URL}>
+            <input type="text" name="srch" placeholder="検索したいワードを入力" />
+            <button type="submit" class="srch_btn">
+                検索
+            </button>
+        </form>
+    </ul>
+</header>
+
+<style>
+    @reference "tailwindcss";
+
+    .header{
+        @apply
+        flex justify-between items-center
+
+        bg-black text-white
+
+        p-5
+    }
+
+    .title{
+        @apply
+        text-lg font-bold tracking-wider
+    }
+
+    .navUl{
+        @apply
+        flex items-center gap-3
+        list-none
+    }
+    .navLi_btn{
+        @apply
+        text-sm font-medium
+        transition-all
+        hover:scale-120
+    }
+    .navLi{
+        @apply
+        text-sm font-medium
+    }
+    .navLi>input{
+        @apply
+        outline rounded p-1
+        hover:ring-2
+        focus:ring-2
+    }
+    .navLi>button{
+        @apply
+        outline rounded p-1
+        hover:ring-2
+    }
+</style>
+
+<script>
+    const forms = document.querySelectorAll<HTMLButtonElement>(".navLi")
+    forms.forEach((form) =>{
+        form.addEventListener("submit", (e) => {
+            e.preventDefault()
+
+            const input = form.querySelector<HTMLInputElement>(`input[name='srch']`)
+            const query = input?.value.trim()
+
+            if(query){
+                const baseURL = form.dataset.base
+                const srchPara = new URLSearchParams({ word: query })
+                window.location.href = `${baseURL}search?${srchPara.toString()}`
+            }else{
+                input?.focus()
+            }
+        })
+    })
+</script>

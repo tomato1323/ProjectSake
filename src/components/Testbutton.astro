@@ -1,0 +1,50 @@
+---
+interface Props{
+    textButton : string,
+    info: string,
+    className: string,
+}
+const { textButton, info, className } = Astro.props
+
+const widthB = `w-[${textButton.length}ch]`
+---
+
+<button type="button" class=`button ${widthB} ${className}` data-info={info}>
+    {textButton}
+</button>
+
+<style>
+    @reference "tailwindcss";
+    .button{
+        @apply
+        block text-center box-content
+        border-2 border-white rounded-xl
+        px-2 py-1
+
+        transition-all
+        hover:scale-110 hover:shadow-lg
+    }
+</style>
+
+<script>
+import { promise } from "astro:schema";
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".button");
+    buttons.forEach((button) => {
+        button?.addEventListener("click", () =>{
+            if(!button.dataset.info) return;
+            const info = button.dataset.info;
+            var ans = confirm(info)
+            if(ans){
+                var promp = prompt("何すき？")
+                if(promp){
+                    alert(promp + "、好きなんだ。\nいいね");
+                }else{
+                    alert("秘密なの？\nそっか");
+                }
+            }else{
+                alert("そっか");
+            }
+        })
+    })
+</script>

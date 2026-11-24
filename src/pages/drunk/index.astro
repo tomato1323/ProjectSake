@@ -1,0 +1,90 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import siru from '@/assets/Drunk/food_misoshiru_asari.png'
+import { Image } from 'astro:assets'
+---
+<Layout title="Bar S">
+    <div class="wrap">
+        <section>
+            <h1>バーボンハウス</h1>
+            <p>
+                飲みすぎです<br>
+                貝の<strong>みそしる</strong>でも飲んで酔い覚ましにしてください
+            </p>
+        </section>
+        <section class="flex flex-col items-center justify-center">
+            <h3>酔いメーター</h3>
+            <div id="bar" style="width: 100%;">
+                <span id="bar-num">100%</span>
+            </div>
+            <button type="button" id="bar-btn" data-base={import.meta.env.BASE_URL}>
+                <Image
+                src={siru}
+                alt="あさりかしじみの汁"
+                id='siru'
+                class=`w-1/2 cursor-pointer`
+                />
+            </button>
+        </section>
+    </div>
+</Layout>
+
+<style>
+    @reference "tailwindcss";
+
+	body{
+		@apply
+		bg-neutral-900 text-white
+	}
+
+    #bar{
+        @apply
+        flex
+        items-center justify-center
+        h-5
+        bg-green-400
+        transition-all
+        duration-300 ease-out
+    }
+    #bar-btn{
+        @apply
+        flex
+        items-center justify-center
+    }
+</style>
+
+<script>
+    const sleep = (ms : number) => {
+        return new Promise((resolve) => {
+            setTimeout(resolve, ms)
+        })
+    }
+
+    const bar = document.getElementById('bar')
+    const barNum = document.getElementById('bar-num')
+    const barBtn = document.getElementById('bar-btn')
+
+    const siru = document.getElementById('siru')
+
+    const maxClick = 5
+    let currentClick = maxClick
+
+    if(bar && barNum && barBtn && siru){
+        siru.style.filter = `blur(${currentClick}px)`
+
+        barBtn.addEventListener('click', async () => {
+            if(currentClick > 0){
+                currentClick--
+                const percent = (currentClick / maxClick) * 100
+                siru.style.filter = `blur(${currentClick}px)`
+                bar.style.width = `${percent}%`
+                barNum.textContent = String(`${percent}%`)
+                if(currentClick == 0){
+                    alert("飲み切りました!")
+                    await sleep(1000)
+                    window.location.href = `${barBtn.dataset.base}`
+                }
+            }
+        })
+    }
+</script>

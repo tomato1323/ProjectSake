@@ -1,0 +1,75 @@
+---
+// src/components/InfiniteSlider.astro
+import { Image } from 'astro:assets'
+
+export interface ImageItem {
+  src: ImageMetadata | string
+  alt: string
+}
+
+interface Props {
+  images: ImageItem[]
+  speed?: number
+  direction?: 'forward' | 'backward'
+  ratio?: string
+}
+
+const {
+  images,
+  speed = 1,
+  direction = 'backward',
+  ratio = '4/3',
+} = Astro.props
+
+const safeImages = images.length < 8 ? Array.from({ length: Math.ceil(8 / images.length) }, () => images).flat() : images
+---
+
+<div class="embla w-full overflow-hidden py-6" data-speed={speed} data-direction={direction}>
+  <div class="embla__container flex">
+    {safeImages.map((img, index) => {
+      const isInit = index < 4
+      const imageLoad = isInit ? 'eager' : 'lazy'
+      const imageDeco = isInit ? 'sync' : 'async'
+      const imagePrio = isInit ? 'high' : 'auto'
+      return(
+      <div class="embla__slide flex-[0_0_33.333%] min-w-37.5 px-2">
+        <div class={`w-full overflow-hidden rounded-xl shadow-md border border-gray-200 bg-white relative`}
+        style={`aspect-ratio: ${ratio};`}
+        >
+          <Image
+            src={img.src as any}
+            alt={img.alt}
+            width={640}
+            class="absolute inset-0 h-full w-full object-cover select-none pointer-events-none"
+            loading={imageLoad}
+            decoding={imageDeco}
+            fetchpriority={imagePrio}
+          />
+        </div>
+      </div>
+      )
+    })}
+  </div>
+</div>
+
+<script>
+  import EmblaCarousel from 'embla-carousel'
+  import AutoScroll from 'embla-carousel-auto-scroll'
+
+  const emblaNodes = document.querySelectorAll('.embla')
+
+  emblaNodes.forEach((node) => {
+    const htmlNode = node as HTMLElement
+    const speed = parseFloat(htmlNode.dataset.speed || '1')
+    const direction = (htmlNode.dataset.direction || 'backward') as 'forward' | 'backward'
+
+    EmblaCarousel(htmlNode, { loop: true, dragFree: true }, [
+      AutoScroll({
+        speed,
+        direction,
+        stopOnMouseEnter: true,
+        stopOnInteraction: false
+      })
+    ])
+  })
+</script>

@@ -1,0 +1,102 @@
+---
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout title="Bar S gacha">
+    <section>
+        <h1>
+            お酒ガチャコーナー
+        </h1>
+        <h3>
+            ランダムにお酒を紹介します
+        </h3>
+        <span id="debug_rand" class=""></span>
+    </section>
+    <section id="gacha_container">
+        <img
+        src=""
+        alt="ガチャ結果"
+        id="gacha_img"
+        style="visibility: hidden;"
+        />
+        <h2 id="gacha_name">
+            random title
+        </h2>
+        <p id="gacha_desc">
+            random desc
+        </p>
+        <button id="gacha_btn">
+            もう一度引く
+        </button>
+    </section>
+</Layout>
+
+<style>
+    @reference "tailwindcss";
+
+	body{
+		@apply
+		bg-neutral-900 text-white
+	}
+
+    #gacha_container{
+        @apply
+        flex flex-col
+        items-center justify-center
+    }
+    #gacha_img{
+        @apply
+        h-[50lvh] w-auto
+        object-cover
+    }
+    #gacha_name{
+        /* @apply */
+    }
+    #gacha_desc{
+        @apply
+        whitespace-pre-line
+    }
+    #gacha_btn{
+        @apply
+        px-3 py-2 my-2
+        outline rounded
+        cursor-pointer
+    }
+</style>
+
+<script>
+    import sakes from '@/pages/gacha/sakes.json'
+    const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/gacha/*.{jpg,png}',{ eager: true })
+
+    const container = document.getElementById("gacha_container")
+    const img = document.querySelector<HTMLImageElement>("#gacha_img")
+    const name = document.getElementById("gacha_name")
+    const desc = document.getElementById("gacha_desc")
+    const btn = document.getElementById("gacha_btn")
+
+    const debug = document.getElementById("debug_rand")
+    const isDebug = false
+
+    function gacha(){
+        if(img && name && desc && container){
+            const target = Math.floor(Math.random() * sakes.length)
+            name.textContent = sakes[target].name
+            desc.textContent = sakes[target].desc
+            const key = `/src/assets/gacha/${sakes[target].img}`
+            img.src = images[key].default.src
+            img.style.visibility = "visible"
+            if(debug){
+                if(isDebug){
+                    debug.textContent = `debug: ${target}`
+                }else{
+                    debug.style.visibility = "none"
+                }
+            }
+        }
+    }
+
+    gacha()
+    if(btn){
+        btn.addEventListener("click", gacha)
+    }
+</script>

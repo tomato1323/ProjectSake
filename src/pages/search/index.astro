@@ -1,0 +1,121 @@
+---
+import Layout from '@/layouts/Layout.astro'
+
+const base = import.meta.env.BASE_URL
+---
+<Layout title="Search">
+    <div class="wrap">
+        <!--
+        DBとかPHPとか使ってないから
+        全部のネタバレが入ってるよ
+        -->
+        <section>
+            <h1>検索結果:<span id="srch_word"></span></h1>
+        </section>
+        <section>
+            <div id="result"></div>
+        </section>
+
+        <template data-word="みくも">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}mikumo`}>光栄菊　美雲(みくも)</a>
+            <p class="result_desc">ずっと&quot;イチゴの甘いところ&quot;だけ</p>
+        </template>
+
+        <template data-word="くどきじょうず">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}kudoki`}>
+                くどき上手　辛口吟醸
+            </a>
+            <p class="result_desc">
+                &quot;辛くて旨い&quot;の融合
+            </p>
+        </template>
+
+        <template data-word="おりがらみ">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}hudou`}>
+                不動　おりがらみ
+            </a>
+            <p class="result_desc">
+                シュワっと爽快な旨味の泡
+            </p>
+        </template>
+
+        <template data-word="みそしる">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}drunk`}>
+                貝の味噌汁
+            </a>
+            <p class="result_desc">
+                吞みすぎです
+            </p>
+        </template>
+
+        <template data-word="がちゃ">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}gacha`}>
+                お酒ガチャコーナー
+            </a>
+            <p class="result_desc">
+                ランダムにお酒を紹介します
+            </p>
+        </template>
+
+        <template data-word="a">
+            <p>該当1件</p>
+            <a class="result_link" href={`${base}`}>
+            </a>
+            <p class="result_desc">
+            </p>
+        </template>
+    </div>
+</Layout>
+
+<style>
+    @reference "tailwindcss";
+
+    .wrap{
+        @apply
+		min-h-lvh
+		bg-neutral-900 text-white
+    }
+
+    #result{
+        @apply
+        container mx-auto
+        px-5
+    }
+
+    .result_link{
+        @apply
+        inline-block
+        text-2xl underline
+        transition-all
+        hover:scale-105
+    }
+</style>
+
+<script>
+    const params = new URLSearchParams(window.location.search)
+    const query = params.get("word")?.trim() || ""
+    const target = document.getElementById("srch_word")
+    const target_out = document.getElementById("result")
+    const baseURL = import.meta.env.BASE_URL
+
+    if(target){
+        target.textContent = query
+    }
+    if(target_out){
+        const template = document.querySelector<HTMLTemplateElement>(`template[data-word="${query}"]`)
+
+        if(template){
+            target_out.appendChild(template.content.cloneNode(true))
+        }else if(query){
+            target_out.innerHTML = '見つかりませんでした（ひらがなで検索してみてください）'
+        }else{
+            target_out.innerHTML = '未入力エラー'
+            window.location.href = `${baseURL}`
+        }
+    }
+</script>

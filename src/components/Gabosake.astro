@@ -1,0 +1,55 @@
+---
+interface Props{
+    textButton : string,
+    gabo: string,
+    className: string,
+}
+const { textButton, gabo, className } = Astro.props
+
+const widthB = `w-[${textButton.length}ch]`
+---
+
+<button type="button" class=`button ${widthB} ${className}` data-gabo={gabo} data-base={import.meta.env.BASE_URL}>
+    {textButton}
+</button>
+
+<style>
+    @reference "tailwindcss";
+    .button{
+        @apply
+        block text-center box-content
+        border-2 border-white rounded-xl
+        px-2 py-1
+
+        transition-all
+        hover:scale-110 hover:shadow-lg
+    }
+</style>
+
+<script>
+    const rootElement = document.documentElement
+    let blurLevel = 0
+    const maxLevel = 5
+    const blurStack = 1
+
+    function updateBlur(count : number){
+        rootElement.style.filter = `blur(${count * blurStack}px)`
+        rootElement.style.transition = 'filter 0.3s ease'
+        alert(`お酒を${count}杯のみました`)
+    }
+
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".button")
+    buttons.forEach((button) => {
+        button?.addEventListener("click", () =>{
+            if(!button.dataset.gabo) return
+            const baseURL = button.dataset.base
+            if(blurLevel < maxLevel){
+                blurLevel++
+                updateBlur(blurLevel)
+            }else{
+                alert("飲みすぎです")
+                window.location.href = `${baseURL}drunk`
+            }
+        })
+    })
+</script>

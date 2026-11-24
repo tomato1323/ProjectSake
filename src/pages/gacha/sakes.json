@@ -1,0 +1,22 @@
+[
+    {
+        "name": "獺祭",
+        "desc": "「美味しくなければ意味がない」獺祭のスタンダード",
+        "img": "dassai45.jpg"
+    },
+    {
+        "name": "澪",
+        "desc": "お米うまれのフルーティーでやさしい甘み",
+        "img": "mio.png"
+    },
+    {
+        "name": "噛むお酒",
+        "desc": "噛むたびに口の中いっぱいにあふれる、果肉たっぷりのお酒",
+        "img": "IchigoBiteSake.png"
+    },
+    {
+        "name": "jägermeister",
+        "desc": "Ich mag Jägerbomb",
+        "img": "Miniaturen.jpg"
+    }
+]

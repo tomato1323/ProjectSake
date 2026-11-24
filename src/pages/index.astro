@@ -1,0 +1,184 @@
+---
+import Layout from '@/layouts/Layout.astro'
+import Slider from '@/components/Slider.astro'
+import Testbutton from '@/components/Testbutton.astro'
+import Gabosake from '@/components/Gabosake.astro'
+import Image from 'astro/components/Image.astro'
+
+const rawSake = import.meta.glob<{ default: ImageMetadata}>('@/assets/Sake/*.{jpg,png}', {eager: true})
+const sake = Object.entries(rawSake).map(([path, file]) => ({
+	src: file.default,
+	alt: path.split('/').pop()?.split('.')[0] || 'Sake Image'
+}))
+
+const rawBest = import.meta.glob<{ default: ImageMetadata}>('@/assets/Best/*.{jpg,png}', {eager: true})
+const best = Object.entries(rawBest).map(([path, file]) => ({
+	src: file.default,
+	alt: path.split('/').pop()?.split('.')[0] || 'Best Sake Image'
+}))
+
+const rawService = import.meta.glob<{ default: ImageMetadata}>('@/assets/Service/*.{jpg,png}', {eager: true})
+const service = Object.entries(rawService).map(([path, file]) => ({
+	src: file.default,
+	alt: path.split('/').pop()?.split('.')[0] || 'Service Image'
+}))
+---
+
+<Layout title="Bar S">
+	<div class="wrap">
+		<section class="top">
+			<a href="gacha"><h1>Bar S</h1></a>
+			<h2>&quot;日本酒に十の徳あり&quot;</h2>
+		</section>
+		<section>
+			<Slider
+			images={sake}
+			/>
+			<Slider
+			images={sake}
+			direction='forward'
+			/>
+		</section>
+		<section class="description">
+			<p>
+				Bar Sではお客様を様々なサービスでもって
+				おもてなししております
+			</p>
+			<br />
+			<h2>多彩なアルコール</h2>
+			<p>
+				酒、ワイン、果実酒など
+				選りすぐりの日本酒も取り揃えております
+			</p>
+			<div class="flex flex-row w-full justify-center">
+				<a class="cardSys" href="hudou">
+					<Image
+					src={best[0].src}
+					alt={best[0].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>不動 おりがらみ</span>
+				</a>
+				<a class="cardSys" href="kudoki">
+					<Image
+					src={best[1].src}
+					alt={best[1].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>くどき上手</span>
+				</a>
+				<a class="cardSys" href="mikumo">
+					<Image
+					src={best[2].src}
+					alt={best[2].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>光栄菊 美雲</span>
+				</a>
+			</div>
+			<br />
+			<h2>隠れ家的店舗</h2>
+			<p>
+				暗めの照明とこだわりの内装が
+				あなたをお出迎えします
+			</p>
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d972.7491481500784!2d141.31935003473043!3d43.063438688631614!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5f0b2900f064b07d%3A0x5e2799a861cb016b!2z5bCx5Yq056e76KGM5pSv5o-05LqL5qWt5omAIOOCq-ODqeODvOOCuuODu-ODqeODnOacreW5jA!5e0!3m2!1sja!2sjp!4v1785294452963!5m2!1sja!2sjp" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="MAP" class="h-[70dvh] w-[80dvw]" />
+			<br />
+			<h2>なんかいい感じのサービス</h2>
+			<p>
+				さすがになにも思いつかなくなってきた
+				おいしいもの食べ飲みできれば満足なので...
+			</p>
+			<div class="flex flex-row w-full justify-center">
+				<a class="cardSys">
+					<Image
+					src={service[0].src}
+					alt={service[0].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>桃太郎派遣</span>
+				</a>
+				<a class="cardSys">
+					<Image
+					src={service[1].src}
+					alt={service[1].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>印籠サービス</span>
+				</a>
+				<a class="cardSys">
+					<Image
+					src={service[2].src}
+					alt={service[2].alt}
+					width={1000}
+					height={1000}
+					/>
+					<span>あち客(要予約)</span>
+				</a>
+			</div>
+		</section>
+		<section>
+			<div class="easteregg">
+				<Testbutton
+				textButton="お酒"
+				info='酒飲み？'
+				className=""
+				/>
+				<Gabosake
+				textButton='飲む'
+				gabo='Drink'
+				className=''
+				/>
+			</div>
+		</section>
+	</div>
+</Layout>
+
+<style>
+	@reference "tailwindcss";
+
+	body{
+		@apply
+		bg-neutral-900 text-white
+	}
+
+	.top{
+		@apply
+		flex flex-col
+		items-center justify-center
+		h-[61.8dvh]
+	}
+
+	.description{
+		@apply
+		flex flex-col
+		items-center justify-center
+		container mx-auto
+	}
+
+	.cardSys{
+		@apply
+		flex flex-col
+		items-center justify-center
+		p-1 m-1 w-1/4
+		border rounded-xl
+		transition-all
+		hover:scale-105
+	}
+
+	.easteregg{
+		@apply
+		flex flex-row
+		items-center justify-center
+		p-1
+	}
+	.easteregg>child{
+		@apply
+		px-1
+	}
+</style>
